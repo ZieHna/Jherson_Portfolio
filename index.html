@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jherson Manejero — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #e8e0d0;
+    --dark: #111109;
+    --mid: #1a1a17;
+    --accent: #c8b89a;
+    --red: #b03020;
+    --text-muted: #888880;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cream);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--cream);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
+    mix-blend-mode: difference;
+  }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 20px; height: 20px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px;
+    mix-blend-mode: normal;
+  }
+  nav::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(17,17,9,0.95) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none; position: relative;
+  }
+  .nav-links a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+
+  /* HERO */
+  #hero {
+    height: 100vh;
+    display: flex; align-items: flex-end;
+    position: relative;
+    overflow: hidden;
+    padding: 0 48px 60px;
+  }
+  .hero-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 18vw, 260px);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(232,224,208,0.07);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 0.05em;
+  }
+  .hero-content { position: relative; z-index: 2; width: 100%; }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 11vw, 160px);
+    line-height: 0.88;
+    letter-spacing: 0.03em;
+    color: var(--cream);
+  }
+  .hero-name span {
+    display: block;
+    -webkit-text-stroke: 1px var(--cream);
+    color: transparent;
+  }
+  .hero-bottom {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-top: 32px;
+  }
+  .hero-desc {
+    max-width: 340px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--accent);
+    font-weight: 300;
+  }
+  .hero-scroll {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+  .hero-scroll .line {
+    width: 40px; height: 1px;
+    background: var(--text-muted);
+  }
+  @keyframes scrollBounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .hero-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; opacity: 0.4;
+  }
+  .hero-red-accent {
+    position: absolute;
+    top: 20%; right: 15%;
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse at center, rgba(176,48,32,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* SECTIONS COMMON */
+  section { padding: 120px 48px; }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 60px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(200,184,154,0.2);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 100px);
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+  }
+
+  /* ABOUT */
+  #about {
+    background: var(--mid);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-left .section-title { margin-bottom: 32px; }
+  .about-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--accent);
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .about-hobbies {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 32px;
+  }
+  .hobby-tag {
+    padding: 6px 16px;
+    border: 1px solid rgba(200,184,154,0.25);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    transition: all 0.3s;
+  }
+  .hobby-tag:hover {
+    background: var(--accent);
+    color: var(--dark);
+    border-color: var(--accent);
+  }
+  .about-right { position: relative; }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  }
+  .stat-box {
+    background: var(--dark);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+  .stat-box:hover { background: #1e1e1a; }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--cream);
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* EDUCATION */
+  #education { background: var(--dark); }
+  .edu-inner { max-width: 900px; }
+  .edu-block {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 48px;
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(200,184,154,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .edu-block::before {
+    content: ''; position: absolute;
+    left: 0; bottom: 0; width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.6s ease;
+  }
+  .edu-block:hover::before { width: 100%; }
+  .edu-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+  .edu-school {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .edu-degree {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  .edu-desc {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* EXPERIENCE */
+  #experience { background: var(--mid); }
+  .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 60px; }
+  .exp-card {
+    background: var(--dark);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s;
+  }
+  .exp-card:hover { transform: translateY(-4px); }
+  .exp-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--accent));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+  .exp-card:hover::after { transform: scaleX(1); }
+  .exp-period {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .exp-role {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.06em;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .exp-company {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .exp-desc {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* SKILLS */
+  #skills { background: var(--dark); }
+  .skills-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 60px;
+  }
+  .skill-category-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.06em;
+    color: var(--cream);
+    margin-bottom: 32px;
+  }
+  .skill-item {
+    display: flex; align-items: center; gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(200,184,154,0.08);
+  }
+  .skill-name {
+    flex: 1;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .skill-bar-wrap {
+    width: 160px; height: 2px;
+    background: rgba(200,184,154,0.12);
+    position: relative;
+  }
+  .skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--accent));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+  .skill-bar-fill.animate { transform: scaleX(1); }
+
+  /* PORTFOLIO */
+  #portfolio { background: var(--mid); padding-bottom: 80px; }
+  .portfolio-filters {
+    display: flex; gap: 4px;
+    margin: 48px 0 48px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 10px 24px;
+    border: 1px solid rgba(200,184,154,0.2);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--cream);
+    color: var(--dark);
+    border-color: var(--cream);
+  }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+  }
+  .portfolio-item {
+    aspect-ratio: 4/3;
+    background: var(--dark);
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+  }
+  .portfolio-item.wide { grid-column: span 2; }
+  .portfolio-item.tall { grid-row: span 2; }
+  .portfolio-thumb {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+  .portfolio-item:hover .portfolio-thumb { transform: scale(1.05); }
+  .portfolio-thumb-bg {
+    position: absolute; inset: 0;
+    background: var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 4vw, 56px);
+    letter-spacing: 0.04em;
+    color: rgba(232,224,208,0.05);
+  }
+  .portfolio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(17,17,9,0.95) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 24px;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-cat {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .portfolio-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.06em;
+    color: var(--cream);
+  }
+
+  /* Category colors */
+  .cat-photo .portfolio-thumb-bg { background: #151510; color: rgba(232,224,208,0.06); }
+  .cat-video .portfolio-thumb-bg { background: #120f10; color: rgba(232,224,208,0.06); }
+  .cat-graphics .portfolio-thumb-bg { background: #101215; color: rgba(232,224,208,0.06); }
+  .cat-animation .portfolio-thumb-bg { background: #101510; color: rgba(232,224,208,0.06); }
+  .cat-ai .portfolio-thumb-bg { background: #15101a; color: rgba(232,224,208,0.06); }
+
+  /* Grid art for portfolio items */
+  .grid-art {
+    position: absolute; inset: 0;
+    display: grid;
+    opacity: 0.4;
+    transition: opacity 0.4s;
+  }
+  .portfolio-item:hover .grid-art { opacity: 0.15; }
+
+  /* CONTACT */
+  #contact { background: var(--dark); }
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+    margin-top: 60px;
+  }
+  .contact-left .section-title { margin-bottom: 24px; }
+  .contact-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 48px;
+    line-height: 1.6;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 20px;
+    text-decoration: none;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(200,184,154,0.1);
+    transition: all 0.3s;
+    position: relative;
+  }
+  .contact-link::after {
+    content: '→';
+    position: absolute; right: 0;
+    color: var(--accent);
+    transform: translateX(-10px); opacity: 0;
+    transition: all 0.3s;
+  }
+  .contact-link:hover::after { transform: translateX(0); opacity: 1; }
+  .contact-link:hover { padding-left: 8px; }
+  .contact-link-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .contact-link-value {
+    font-size: 1rem;
+    color: var(--cream);
+  }
+  .contact-right {}
+  .contact-form-group { margin-bottom: 28px; }
+  .contact-form-group label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .contact-form-group input,
+  .contact-form-group textarea {
+    width: 100%;
+    background: var(--mid);
+    border: 1px solid rgba(200,184,154,0.12);
+    border-bottom: 1px solid rgba(200,184,154,0.3);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    resize: none;
+  }
+  .contact-form-group input:focus,
+  .contact-form-group textarea:focus {
+    border-color: var(--accent);
+    background: rgba(200,184,154,0.05);
+  }
+  .contact-form-group textarea { height: 120px; }
+  .send-btn {
+    padding: 18px 48px;
+    background: var(--cream);
+    color: var(--dark);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    cursor: none;
+    transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .send-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--mid);
+    padding: 40px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(200,184,154,0.08);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+  }
+  .footer-copy {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+  .footer-behance {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-behance:hover { color: var(--cream); }
+
+  /* ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    #hero { padding: 0 24px 48px; }
+    #about, .skills-layout, .contact-inner, .exp-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    .portfolio-item.wide { grid-column: span 1; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">JM</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-red-accent"></div>
+  <div class="hero-bg-text">PORTFOLIO</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Creative Presentation · Multimedia Specialist</div>
+    <div class="hero-name">
+      Jherson
+      <span>Manejero</span>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-desc">Photography · Videography · Graphic Design · Animation · AI Video</p>
+      <div class="hero-scroll">
+        <span class="line"></span>
+        Scroll
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left reveal">
+    <div class="section-label">01 — About</div>
+    <div class="section-title">About<br>Me</div>
+    <p class="about-text">I'm Jherson Manejero, 27 years old, and passionate about creative arts especially in photography, videography, and graphic design. I love bringing ideas to life through visual storytelling.</p>
+    <p class="about-text">Creativity and curiosity drive everything I do, both in work and in life.</p>
+    <div class="about-hobbies">
+      <span class="hobby-tag">Movies & Anime</span>
+      <span class="hobby-tag">Basketball</span>
+      <span class="hobby-tag">Hiking</span>
+      <span class="hobby-tag">Coffee</span>
+    </div>
+  </div>
+  <div class="about-right reveal reveal-delay-2">
+    <div class="about-stats">
+      <div class="stat-box">
+        <div class="stat-number">6+</div>
+        <div class="stat-label">Years of Experience</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Disciplines</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Companies</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Creative Vision</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label reveal">02 — Education</div>
+  <div class="edu-inner">
+    <div class="edu-block reveal">
+      <div class="edu-year">2015<br>—<br>2019</div>
+      <div>
+        <div class="edu-school">STI College</div>
+        <div class="edu-degree">BS Information Technology</div>
+        <div class="edu-desc">Balanced athletic and academic excellence as a varsity team member and Top 10 Programmer on campus. Developed strong teamwork, discipline, and a creative-technical mindset applied to every multimedia project.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label reveal">03 — Experience</div>
+  <div class="section-title reveal">Work<br>Experience</div>
+  <div class="exp-grid">
+    <div class="exp-card reveal reveal-delay-1">
+      <div class="exp-period">2019 — 2023</div>
+      <div class="exp-role">Graphic Designer</div>
+      <div class="exp-company">Boldr</div>
+      <div class="exp-desc">Produced engaging digital content including social media graphics, marketing materials, and presentations aligned with brand identity. Collaborated cross-functionally, managed multiple projects efficiently, and maintained visual consistency across all platforms.</div>
+    </div>
+    <div class="exp-card reveal reveal-delay-2">
+      <div class="exp-period">2023 — 2025</div>
+      <div class="exp-role">Multimedia Specialist</div>
+      <div class="exp-company">Freelance</div>
+      <div class="exp-desc">Created and managed content across social media, video, photography, and graphic design. Responsibilities include scheduling posts, editing videos, conducting photo shoots, and designing marketing materials all aligned with brand identity and messaging.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label reveal">04 — Skills</div>
+  <div class="section-title reveal">Personal<br>Skills</div>
+  <div class="skills-layout">
+    <div class="reveal reveal-delay-1">
+      <div class="skill-category-title">Photography</div>
+      <div class="skill-item">
+        <span class="skill-name">Event Photography</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.95"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Portrait & Studio</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.92"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Wedding & Prenup</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.88"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Corporate Events</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.90"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Photo Editing & Retouching</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.94"></div></div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="skill-category-title">Videography & Design</div>
+      <div class="skill-item">
+        <span class="skill-name">Video Editing</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.92"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Graphic Design</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.90"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Motion Graphics</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Animation</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.82"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">AI Video Production</span>
+        <div class="skill-bar-wrap"><div class="skill-bar-fill" data-width="0.88"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-label reveal">05 — Portfolio</div>
+  <div class="section-title reveal">Project<br>Portfolio</div>
+  <div class="portfolio-filters reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="photo">Photography</button>
+    <button class="filter-btn" data-filter="video">Videography</button>
+    <button class="filter-btn" data-filter="graphics">Graphics</button>
+    <button class="filter-btn" data-filter="animation">Animation</button>
+    <button class="filter-btn" data-filter="ai">AI Videos</button>
+  </div>
+  <div class="portfolio-grid" id="portfolioGrid">
+
+    <!-- Photography -->
+    <div class="portfolio-item wide cat-photo" data-cat="photo">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">KIDDIE<br>PARTY</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.25" viewBox="0 0 800 400">
+          <circle cx="200" cy="200" r="180" fill="none" stroke="#e8e0d0" stroke-width="0.5" opacity="0.3"/>
+          <circle cx="200" cy="200" r="120" fill="none" stroke="#c8b89a" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="600" cy="200" r="150" fill="none" stroke="#e8e0d0" stroke-width="0.5" opacity="0.2"/>
+          <line x1="0" y1="200" x2="800" y2="200" stroke="#c8b89a" stroke-width="0.3" opacity="0.3"/>
+          <line x1="400" y1="0" x2="400" y2="400" stroke="#c8b89a" stroke-width="0.3" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography</div>
+        <div class="portfolio-title">Kiddie Party</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-photo" data-cat="photo">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">CHRIST-<br>ENING</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <rect x="50" y="50" width="300" height="200" fill="none" stroke="#e8e0d0" stroke-width="0.5"/>
+          <rect x="80" y="80" width="240" height="140" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <line x1="50" y1="150" x2="350" y2="150" stroke="#c8b89a" stroke-width="0.3"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography</div>
+        <div class="portfolio-title">Christening</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-photo" data-cat="photo">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">ADULT<br>BDAY</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <polygon points="200,30 370,270 30,270" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <polygon points="200,80 320,250 80,250" fill="none" stroke="#e8e0d0" stroke-width="0.3"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography</div>
+        <div class="portfolio-title">Adult Birthday</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-photo" data-cat="photo">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">DEBUT</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <ellipse cx="200" cy="150" rx="160" ry="120" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <ellipse cx="200" cy="150" rx="100" ry="70" fill="none" stroke="#e8e0d0" stroke-width="0.3"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography</div>
+        <div class="portfolio-title">Debut & Pre-Debut</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item wide cat-photo" data-cat="photo">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">PRENUP &<br>WEDDING</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 800 400">
+          <path d="M0,200 Q200,50 400,200 T800,200" fill="none" stroke="#c8b89a" stroke-width="1"/>
+          <path d="M0,250 Q200,100 400,250 T800,250" fill="none" stroke="#e8e0d0" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography</div>
+        <div class="portfolio-title">Prenup & Wedding</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-photo" data-cat="photo">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">CORPO-<br>RATE</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <rect x="40" y="40" width="80" height="220" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <rect x="160" y="80" width="80" height="180" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <rect x="280" y="60" width="80" height="200" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography</div>
+        <div class="portfolio-title">Corporate Events</div>
+      </div>
+    </div>
+
+    <!-- Videography -->
+    <div class="portfolio-item cat-video" data-cat="video">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">B2B<br>MARKETING</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <polygon points="160,80 320,150 160,220" fill="none" stroke="#c8b89a" stroke-width="1"/>
+          <circle cx="200" cy="150" r="100" fill="none" stroke="#e8e0d0" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Videography</div>
+        <div class="portfolio-title">B2B Marketing</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-video" data-cat="video">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">SIAA<br>ANNIV.</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <circle cx="200" cy="150" r="130" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <circle cx="200" cy="150" r="80" fill="none" stroke="#e8e0d0" stroke-width="0.5"/>
+          <circle cx="200" cy="150" r="30" fill="rgba(200,184,154,0.08)" stroke="#c8b89a" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Videography</div>
+        <div class="portfolio-title">SIAA Anniversary</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-video" data-cat="video">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">WEDDING<br>FILM</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 400 300">
+          <path d="M200,30 C280,30 350,90 350,150 C350,210 280,270 200,270 C120,270 50,210 50,150 C50,90 120,30 200,30Z" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Videography</div>
+        <div class="portfolio-title">Wedding Film</div>
+      </div>
+    </div>
+
+    <!-- Graphics -->
+    <div class="portfolio-item wide cat-graphics" data-cat="graphics">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">SOCIAL MEDIA<br>GRAPHICS</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 800 400">
+          <rect x="40" y="40" width="160" height="110" rx="4" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <rect x="220" y="40" width="160" height="110" rx="4" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <rect x="400" y="40" width="160" height="110" rx="4" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <rect x="580" y="40" width="160" height="110" rx="4" fill="none" stroke="#c8b89a" stroke-width="0.5"/>
+          <rect x="40" y="170" width="160" height="110" rx="4" fill="none" stroke="#e8e0d0" stroke-width="0.3"/>
+          <rect x="220" y="170" width="340" height="110" rx="4" fill="none" stroke="#e8e0d0" stroke-width="0.3"/>
+          <rect x="580" y="170" width="160" height="110" rx="4" fill="none" stroke="#e8e0d0" stroke-width="0.3"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Graphics</div>
+        <div class="portfolio-title">Social Media Creatives</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-graphics" data-cat="graphics">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">EVENT<br>BANNERS</div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Graphics</div>
+        <div class="portfolio-title">Event Banners</div>
+      </div>
+    </div>
+
+    <!-- Animation -->
+    <div class="portfolio-item cat-animation" data-cat="animation">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">MOTION<br>GRAPHICS</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.25" viewBox="0 0 400 300">
+          <g stroke="#c8b89a" stroke-width="0.5" fill="none">
+            <path d="M80,240 L80,60 L200,60 L200,150 L320,150 L320,240"/>
+            <circle cx="80" cy="60" r="6" fill="rgba(200,184,154,0.3)"/>
+            <circle cx="200" cy="150" r="6" fill="rgba(200,184,154,0.3)"/>
+            <circle cx="320" cy="240" r="6" fill="rgba(200,184,154,0.3)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Animation</div>
+        <div class="portfolio-title">Motion Graphics</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-animation" data-cat="animation">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">2D<br>ANIMATION</div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Animation</div>
+        <div class="portfolio-title">2D Animation</div>
+      </div>
+    </div>
+
+    <!-- AI Videos -->
+    <div class="portfolio-item wide cat-ai" data-cat="ai">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">AI VIDEO<br>PRODUCTION</div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.2" viewBox="0 0 800 400">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#c8b89a" stroke-width="0.3"/>
+            </pattern>
+          </defs>
+          <rect width="800" height="400" fill="url(#grid)"/>
+          <circle cx="400" cy="200" r="120" fill="none" stroke="#c8b89a" stroke-width="1"/>
+          <circle cx="400" cy="200" r="60" fill="rgba(200,184,154,0.05)" stroke="#e8e0d0" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">AI Videos</div>
+        <div class="portfolio-title">AI Video Production</div>
+      </div>
+    </div>
+
+    <div class="portfolio-item cat-ai" data-cat="ai">
+      <div class="portfolio-thumb">
+        <div class="portfolio-thumb-bg">PRODUCT<br>VISUALS</div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">AI Videos</div>
+        <div class="portfolio-title">Product Visuals</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">06 — Contact</div>
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="section-title">Let's<br>Work</div>
+      <p class="contact-tagline">Open for photography, videography, graphic design, and multimedia collaborations.</p>
+      <div class="contact-links">
+        <a href="https://www.behance.net/jhersonmanejero" target="_blank" class="contact-link">
+          <div>
+            <div class="contact-link-label">Behance</div>
+            <div class="contact-link-value">Jherson Behance</div>
+          </div>
+        </a>
+        <a href="#" class="contact-link">
+          <div>
+            <div class="contact-link-label">Location</div>
+            <div class="contact-link-value">Philippines</div>
+          </div>
+        </a>
+        <a href="#" class="contact-link">
+          <div>
+            <div class="contact-link-label">Availability</div>
+            <div class="contact-link-value">Open for Projects</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="contact-right reveal reveal-delay-2">
+      <div class="contact-form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="John Doe">
+      </div>
+      <div class="contact-form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="hello@example.com">
+      </div>
+      <div class="contact-form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="send-btn" onclick="handleSend(this)">
+        Send Message <span>→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Jherson Manejero</div>
+  <div class="footer-copy">© 2025 · Creative Presentation</div>
+  <a href="https://www.behance.net/jhersonmanejero" target="_blank" class="footer-behance">Behance ↗</a>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Animate skill bars
+        e.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+          bar.style.transform = `scaleX(${bar.dataset.width})`;
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Also observe skill bars globally
+  document.querySelectorAll('.skill-bar-fill').forEach(bar => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          setTimeout(() => {
+            bar.style.transform = `scaleX(${bar.dataset.width})`;
+          }, 300);
+        }
+      });
+    }, { threshold: 0.5 });
+    obs.observe(bar);
+  });
+
+  // Portfolio filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      portfolioItems.forEach(item => {
+        const show = filter === 'all' || item.dataset.cat === filter;
+        item.style.opacity = show ? '1' : '0.15';
+        item.style.transform = show ? 'scale(1)' : 'scale(0.97)';
+        item.style.transition = 'opacity 0.4s, transform 0.4s';
+      });
+    });
+  });
+
+  // Parallax hero
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const heroBg = document.querySelector('.hero-bg-text');
+    if (heroBg) heroBg.style.transform = `translate(-50%, calc(-50% + ${scrollY * 0.3}px))`;
+    const heroRed = document.querySelector('.hero-red-accent');
+    if (heroRed) heroRed.style.transform = `translateY(${scrollY * 0.2}px)`;
+  });
+
+  // Send button
+  function handleSend(btn) {
+    btn.textContent = 'Sent! ✓';
+    btn.style.background = 'var(--accent)';
+    setTimeout(() => {
+      btn.innerHTML = 'Send Message <span>→</span>';
+      btn.style.background = 'var(--cream)';
+    }, 3000);
+  }
+
+  // Smooth active nav highlight
+  const sections = document.querySelectorAll('section[id], footer');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--cream)' : 'var(--accent)';
+    });
+  });
+</script>
+</body>
+</html>
