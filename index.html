@@ -826,7 +826,7 @@
   #skills { background: var(--dark); }
   .skills-layout {
     display: grid;
-    grid-template-columns: 1fr 460px;
+    grid-template-columns: 1fr 1fr;
     gap: 80px;
     margin-top: 60px;
   }
@@ -1221,15 +1221,14 @@
     position: relative;
     background: var(--dark);
     overflow: hidden;
-    cursor: none;
-    padding: 36px 32px 32px;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 230px;
+    min-height: clamp(260px, 28vw, 400px);
     transition: background 0.4s;
   }
-  .video-card.wide { grid-column: span 2; }
+  .video-card.wide { grid-column: span 2; min-height: clamp(280px, 30vw, 420px); }
   .video-card:hover { background: #151511; }
   .video-card::after {
     content: '';
@@ -1239,8 +1238,44 @@
     background: linear-gradient(90deg, var(--red), var(--accent));
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.5s ease;
+    z-index: 2;
   }
   .video-card:hover::after { transform: scaleX(1); }
+
+  /* ── Video element inside card ── */
+  .video-card video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+    display: block;
+  }
+  /* When card has a src set, show thumbnail on hover */
+  .video-card.has-src video { opacity: 0.18; }
+  .video-card.has-src:hover video { opacity: 0.35; }
+  /* When playing, video is fully visible */
+  .video-card.playing video {
+    opacity: 1;
+    z-index: 3;
+  }
+  .video-card.playing .vc-info { opacity: 0; pointer-events: none; }
+  .video-card.playing::after { display: none; }
+
+  /* Info overlay (index + text) */
+  .vc-info {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 36px 32px 32px;
+    transition: opacity 0.3s ease;
+  }
   .vc-top {
     display: flex;
     justify-content: space-between;
@@ -1262,10 +1297,29 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     transition: all 0.3s;
+    cursor: pointer;
   }
   .video-card:hover .vc-play { background: var(--cream); border-color: var(--cream); }
   .vc-play svg { fill: rgba(200,184,154,0.5); transition: fill 0.3s; }
   .video-card:hover .vc-play svg { fill: var(--dark); }
+
+  /* No-src state: show "add video" hint */
+  .vc-no-src {
+    position: absolute;
+    inset: 0; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .vc-no-src-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(200,184,154,0.18);
+    border: 1px dashed rgba(200,184,154,0.12);
+    padding: 6px 14px;
+  }
+  .video-card.has-src .vc-no-src { display: none; }
+
   .vc-cat {
     font-size: 0.58rem;
     letter-spacing: 0.22em;
@@ -1792,7 +1846,7 @@
 
     /* Video grid: single column on mobile */
     .video-grid { grid-template-columns: 1fr; }
-    .video-card { grid-column: span 1 !important; min-height: 160px; padding: 24px 20px 20px; }
+    .video-card { grid-column: span 1 !important; min-height: clamp(180px, 50vw, 260px); padding: 24px 20px 20px; }
     .vc-index { font-size: 2.8rem; }
     .vc-title { font-size: 1.3rem; }
 
@@ -1972,6 +2026,71 @@
 
   /* Hamburger — hidden by default (desktop) */
   .nav-hamburger { display: none; }
+
+  /* ── Video Player Modal ── */
+  .vmodal {
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+    background: rgba(0,0,0,0.97);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .vmodal.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .vmodal-player {
+    max-width: 92vw;
+    max-height: 80vh;
+    width: 100%;
+    border: 1px solid rgba(200,184,154,0.12);
+    background: #000;
+    outline: none;
+  }
+  .vmodal-close {
+    position: absolute;
+    top: 24px; right: 32px;
+    background: none;
+    border: 1px solid rgba(232,224,208,0.25);
+    color: var(--cream);
+    font-size: 1.2rem;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    z-index: 2;
+  }
+  .vmodal-close:hover {
+    background: rgba(232,224,208,0.1);
+    border-color: var(--cream);
+  }
+  .vmodal-title {
+    margin-top: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.12em;
+    color: rgba(232,224,208,0.5);
+    text-transform: uppercase;
+  }
+
+  /* ── Animation video inside portfolio-item ── */
+  .portfolio-item .anim-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  /* Hide placeholder thumb when video has a src */
+  .portfolio-item .anim-video[src]:not([src=""]) ~ .portfolio-thumb { display: none; }
+  /* Hide video if src is empty */
+  .portfolio-item .anim-video:not([src]),
+  .portfolio-item .anim-video[src=""] { display: none; }
 </style>
 </head>
 <body>
@@ -2336,8 +2455,8 @@
 
     <!-- Wedding: 1 landscape -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="wedding">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Wedding · 1 of 1" class="photo-img">
+    
+      <img src="./samples/images/wedding/DSC09693.jpg" alt="Wedding · 1 of 1" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2362,8 +2481,8 @@
 
     <!-- Family: landscape 1 -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="family">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Family · 1 of 2" class="photo-img">
+      
+      <img src="./samples/images/family/484900674_1103675135135821_5090097332369417682_n.jpg" alt="Family · 1 of 2" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2386,8 +2505,8 @@
 
     <!-- Family: landscape 2 -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="family">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Family · 2 of 2" class="photo-img">
+     
+      <img src="./samples/images/family/512723678_1183947843775216_1183139189927967291_n.jpg" alt="Family · 2 of 2" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2411,8 +2530,8 @@
 
     <!-- Corporate: 1 landscape -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="corporate">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Corporate · 1 of 1" class="photo-img">
+  
+      <img src="./samples/images/corpo/483896433_659257569985432_5538269366737794172_n.jpg" alt="Corporate · 1 of 1" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2522,8 +2641,8 @@
 
     <!-- Pre-Wedding: landscape 1 -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Pre-Wedding · 1 of 4" class="photo-img">
+      
+      <img src="./samples/images/wedding/pre-wed1.jpg" alt="Pre-Wedding · 1 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2546,8 +2665,8 @@
 
     <!-- Pre-Wedding: landscape 2 -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Pre-Wedding · 2 of 4" class="photo-img">
+     
+      <img src="./samples/images/wedding/pre-wed2.jpg" alt="Pre-Wedding · 2 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2571,8 +2690,8 @@
 
     <!-- Pre-Wedding: landscape 3 -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Pre-Wedding · 3 of 4" class="photo-img">
+     
+      <img src="./samples/images/wedding/pre-wed3.jpg" alt="Pre-Wedding · 3 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2597,8 +2716,8 @@
 
     <!-- Pre-Wedding: landscape 4 -->
     <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
-      <!-- Replace src="" with your image path -->
-      <img src="" alt="Pre-Wedding · 4 of 4" class="photo-img">
+    
+      <img src="./samples/images/wedding/pre-wed4.jpg" alt="Pre-Wedding · 4 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2934,49 +3053,57 @@
   </div>
   <div class="video-grid">
 
-    <div class="video-card wide">
-      <video src=""></video>
-      <div class="vc-top">
-        <span class="vc-index">01</span>
-        <div class="vc-play">
-          <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+    <div class="video-card wide" data-vid="1">
+      <video src="./samples/videos/B2b Marketing.mp4" preload="metadata"></video>
+      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">01</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
         </div>
-      </div>
-      <div class="vc-bottom">
-        <div class="vc-cat">Videography</div>
-       
-        <div class="vc-title">B2B Marketing</div>
-        <div class="vc-desc">Corporate brand video targeting business-to-business clients and stakeholders.</div>
+        <div class="vc-bottom">
+          <div class="vc-cat">Videography</div>
+          <div class="vc-title">B2B Marketing</div>
+          <div class="vc-desc">Corporate brand video targeting business-to-business clients and stakeholders.</div>
+        </div>
       </div>
     </div>
 
-    <div class="video-card">
-      <video src=""></video>
-      <div class="vc-top">
-        <span class="vc-index">02</span>
-        <div class="vc-play">
-          <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+    <div class="video-card" data-vid="2">
+      <video src="./samples/videos/SIAA.mp4" preload="metadata"></video>
+      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">02</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
         </div>
-      </div>
-      <div class="vc-bottom">
-        <div class="vc-cat">Videography</div>
-        <div class="vc-title">SIAA Anniversary</div>
-        <div class="vc-desc">Commemorative event film for the SIAA anniversary celebration.</div>
+        <div class="vc-bottom">
+          <div class="vc-cat">Videography</div>
+          <div class="vc-title">SIAA Anniversary</div>
+          <div class="vc-desc">Commemorative event film for the SIAA anniversary celebration.</div>
+        </div>
       </div>
     </div>
 
-    <div class="video-card wide">
-      <video src=""></video>
-      <div class="vc-top">
-        <span class="vc-index">03</span>
-        <div class="vc-play">
-          <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+    <div class="video-card wide" data-vid="3">
+      <video src="./samples/videos/wedding.mp4" preload="metadata"></video>
+      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">03</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
         </div>
-      </div>
-      <div class="vc-bottom">
-        <div class="vc-cat">Videography</div>
-        <div class="vc-title">Wedding Film</div>
-        <div class="vc-desc">Cinematic wedding film capturing intimate moments and the beauty of the day.</div>
+        <div class="vc-bottom">
+          <div class="vc-cat">Videography</div>
+          <div class="vc-title">Wedding Film</div>
+          <div class="vc-desc">Cinematic wedding film capturing intimate moments and the beauty of the day.</div>
+        </div>
       </div>
     </div>
 
@@ -2993,7 +3120,7 @@
   <div class="portfolio-grid">
 
     <div class="portfolio-item wide cat-graphics" data-cat="graphics">
-      <img src="" alt="Social Media Creatives" class="photo-img">
+      <img src="./samples/graphic/CMAA_Albet R. Buddahim.png" alt="Social Media Creatives" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -3013,11 +3140,11 @@
     </div>
 
     <div class="portfolio-item cat-graphics" data-cat="graphics">
-      <img src="" alt="Event Banners" class="photo-img">
+      <img src="./samples/graphic/Giann Vega.png" alt="Event Banners" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          
             <rect x="4" y="12" width="40" height="26" rx="2" stroke="#e8e0d0" stroke-width="1.5"/>
             <path d="M12 12 V8 H36 V12" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="10" y1="22" x2="38" y2="22" stroke="#e8e0d0" stroke-width="1.2" stroke-dasharray="3 3"/>
@@ -3045,15 +3172,13 @@
   <div class="portfolio-grid">
 
     <div class="portfolio-item cat-animation" data-cat="animation">
-      <video src=""></video>
+      <video class="anim-video" src="./samples/animation/award.mp4" autoplay muted loop playsinline></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="44" height="40" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="32" r="5" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="25" cy="20" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="42" cy="10" r="5" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M10 32 Q17 26 25 20 Q33 14 42 10" stroke="#e8e0d0" stroke-width="1" stroke-dasharray="3 3"/>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="10" width="36" height="28" rx="3" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M19 22 L29 28 L19 34Z" fill="#e8e0d0" opacity="0.6"/>
           </svg>
           <span class="ph-label">Motion Graphics</span>
         </div>
@@ -3065,7 +3190,7 @@
     </div>
 
     <div class="portfolio-item cat-animation" data-cat="animation">
-      <video src=""></video>
+      <video class="anim-video" src="./samples/animation/Blue.mp4" autoplay muted loop playsinline></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -3084,7 +3209,7 @@
     </div>
 
     <div class="portfolio-item cat-animation" data-cat="animation">
-      <video src=""></video>
+      <video class="anim-video" src="./samples/animation/Eid.mp4" autoplay muted loop playsinline></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -3115,33 +3240,39 @@
   </div>
   <div class="video-grid">
 
-    <div class="video-card wide">
-      <video src=""></video>
-      <div class="vc-top">
-        <span class="vc-index">01</span>
-        <div class="vc-play">
-          <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+    <div class="video-card wide" data-vid="ai1">
+      <video src="./samples/ai/ai.mp4" preload="metadata"></video>
+      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">01</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
         </div>
-      </div>
-      <div class="vc-bottom">
-        <div class="vc-cat">AI Videos</div>
-        <div class="vc-title">AI Video Production</div>
-        <div class="vc-desc">AI-generated video content crafted with cutting-edge generative tools and creative direction.</div>
+        <div class="vc-bottom">
+          <div class="vc-cat">AI Videos</div>
+          <div class="vc-title">AI Video Production</div>
+          <div class="vc-desc">AI-generated video content crafted with cutting-edge generative tools and creative direction.</div>
+        </div>
       </div>
     </div>
 
-    <div class="video-card">
-      <video src=""></video>
-      <div class="vc-top">
-        <span class="vc-index">02</span>
-        <div class="vc-play">
-          <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+    <div class="video-card" data-vid="ai2">
+      <video src="./samples/ai/burger.mp4" preload="metadata"></video>
+      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">02</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
         </div>
-      </div>
-      <div class="vc-bottom">
-        <div class="vc-cat">AI Videos</div>
-        <div class="vc-title">Product Visuals</div>
-        <div class="vc-desc">AI-assisted product visualisation for marketing campaigns.</div>
+        <div class="vc-bottom">
+          <div class="vc-cat">AI Videos</div>
+          <div class="vc-title">Product Visuals</div>
+          <div class="vc-desc">AI-assisted product visualisation for marketing campaigns.</div>
+        </div>
       </div>
     </div>
 
@@ -3719,6 +3850,62 @@
 
   window.addEventListener('resize', updateHamburger);
   updateHamburger();
+})();
+</script>
+
+<!-- ── Video Player Modal ── -->
+<div class="vmodal" id="vmodal">
+  <button class="vmodal-close" id="vmodalClose">&#x2715;</button>
+  <video class="vmodal-player" id="vmodalPlayer" controls playsinline></video>
+  <div class="vmodal-title" id="vmodalTitle"></div>
+</div>
+
+<script>
+/* ── Video card player ── */
+(function () {
+  var modal   = document.getElementById('vmodal');
+  var player  = document.getElementById('vmodalPlayer');
+  var closeBtn= document.getElementById('vmodalClose');
+  var titleEl = document.getElementById('vmodalTitle');
+
+  /* Mark cards that actually have a src */
+  document.querySelectorAll('.video-card').forEach(function (card) {
+    var vid = card.querySelector('video');
+    if (vid && vid.getAttribute('src') && vid.getAttribute('src') !== '') {
+      card.classList.add('has-src');
+    }
+
+    /* Click: if has src → open modal; else do nothing */
+    card.addEventListener('click', function (e) {
+      if (!card.classList.contains('has-src')) return;
+      var src   = vid.getAttribute('src');
+      var title = card.querySelector('.vc-title') ? card.querySelector('.vc-title').textContent : '';
+      openModal(src, title);
+    });
+  });
+
+  function openModal(src, title) {
+    player.src = src;
+    titleEl.textContent = title;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    player.play().catch(function(){});
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    player.pause();
+    player.src = '';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
 })();
 </script>
 </body>
