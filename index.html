@@ -990,27 +990,84 @@
     white-space: nowrap;
   }
 
+  /* ── Photography sub-category nav ── */
+  .photo-subnav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 32px;
+    border-bottom: 1px solid rgba(200,184,154,0.08);
+    position: relative;
+  }
+  .photo-subnav::-webkit-scrollbar { display: none; }
+  .photo-sub-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: rgba(232,224,208,0.35);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.25s, border-color 0.25s;
+    margin-bottom: -1px;
+  }
+  .photo-sub-btn:hover {
+    color: rgba(232,224,208,0.75);
+  }
+  .photo-sub-btn.active {
+    color: var(--cream);
+    border-bottom-color: var(--red);
+  }
+
   /* ── Shared image grid ── */
   .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3px;
+    columns: 3;
+    column-gap: 3px;
+    width: 100%;
   }
 
   /* ── Image placeholder items ── */
   .portfolio-item {
-    aspect-ratio: 4/3;
+    break-inside: avoid;
+    margin-bottom: 3px;
     background: var(--dark);
     overflow: hidden;
     position: relative;
     cursor: none;
+    display: block;
+    width: 100%;
   }
-  .portfolio-item.wide  { grid-column: span 2; }
-  .portfolio-item.tall  { grid-row: span 2; aspect-ratio: auto; }
-  .portfolio-item.sq    { aspect-ratio: 1/1; }
+  .portfolio-item img.photo-img[src]:not([src=""]) {
+    cursor: pointer !important;
+    pointer-events: all !important;
+  }
+  /* Placeholder min-height so empty boxes still show before real images */
+  .portfolio-item:not(:has(img)) { min-height: 260px; }
+  .portfolio-item.wide  { /* no span in columns layout — full width handled naturally */ }
+  .portfolio-item.tall  { /* tall handled by image natural height */ }
+  .portfolio-item.sq    { }
+
+  /* Real images auto-adjust height */
+  .portfolio-item img.photo-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+  .portfolio-item:hover img.photo-img { transform: scale(1.04); }
+  /* Hide placeholder thumb when image is loaded */
+  .portfolio-item img.photo-img[src]:not([src=""]) ~ .portfolio-thumb { display: none; }
 
   .portfolio-thumb {
     width: 100%; height: 100%;
+    min-height: 260px;
     display: flex; align-items: center; justify-content: center;
     position: relative;
     transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
@@ -1051,6 +1108,7 @@
     justify-content: flex-end;
     padding: 24px 22px;
     z-index: 3;
+    pointer-events: none;
   }
   .portfolio-item:hover .portfolio-overlay { opacity: 1; }
   .portfolio-cat {
@@ -1070,7 +1128,9 @@
 
   /* ── Portfolio filler cards (decorative gap-fillers) ── */
   .portfolio-filler {
-    aspect-ratio: 4/3;
+    break-inside: avoid;
+    margin-bottom: 3px;
+    min-height: 260px;
     background: var(--dark);
     position: relative;
     overflow: hidden;
@@ -1534,17 +1594,261 @@
   .reveal-delay-3 { transition-delay: 0.3s; }
   .reveal-delay-4 { transition-delay: 0.4s; }
 
-  /* MOBILE */
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — TABLET  (≤1024px)
+  ═══════════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    /* Nav */
+    nav { padding: 20px 32px; }
+
+    /* Sections */
+    section { padding: 80px 32px; }
+    #hero { padding: 0 32px 0; }
+    #introduction { padding: 80px 32px; }
+    #toc { padding: 80px 32px; }
+    footer { padding: 32px 32px; }
+
+    /* Hero disciplines — allow wrapping */
+    .hero-disciplines { gap: 12px; }
+    .hero-disciplines span { font-size: 0.75rem; letter-spacing: 0.15em; }
+
+    /* About — keep 2 cols but tighten gap */
+    #about { gap: 40px; }
+    .about-stats { grid-template-columns: repeat(2, 1fr); }
+    .stat-box { padding: 28px 20px; }
+    .stat-number { font-size: 48px; }
+
+    /* Education */
+    .edu-inner { max-width: 100%; }
+    .edu-deco-topright, .edu-deco-bottomright, .edu-deco-dots,
+    .edu-deco-glow, .edu-deco-vline { display: none; }
+
+    /* Experience */
+    .exp-layout { grid-template-columns: 1fr; }
+    .exp-image-col { display: none; }
+
+    /* Skills */
+    .skills-layout { grid-template-columns: 1fr; gap: 40px; }
+    .skills-radial-row { grid-template-columns: repeat(3, 1fr); }
+
+    /* Portfolio */
+    .portfolio-grid { columns: 2; }
+    .video-grid { grid-template-columns: 1fr 1fr; }
+    .video-card.wide { grid-column: span 2; }
+
+    /* Contact */
+    .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    .contact-info-grid { grid-template-columns: 1fr 1fr; }
+
+    /* TOC */
+    .toc-inner { gap: 32px; }
+
+    /* Fixed scroll nav */
+    .fixed-scroll-nav { bottom: 24px; right: 24px; }
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE  (≤768px)
+  ═══════════════════════════════════════════ */
   @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
+    /* ── Base ── */
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    /* ── Nav ── */
+    nav { padding: 16px 20px; }
     .nav-links { display: none; }
-    section { padding: 80px 24px; }
-    #hero { padding: 0 24px 48px; }
-    #about, .skills-layout, .contact-inner, .exp-grid { grid-template-columns: 1fr; }
-    .about-stats { grid-template-columns: 1fr 460px; }
-    .portfolio-grid { grid-template-columns: 1fr 460px; }
-    .portfolio-item.wide { grid-column: span 1; }
-    footer { flex-direction: column; gap: 16px; text-align: center; }
+
+    /* Hamburger menu button */
+    .nav-hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 102;
+      position: relative;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--cream);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .nav-mobile-drawer {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(17,17,9,0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 80px 32px 40px;
+      gap: 0;
+      transform: translateY(-100%);
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      z-index: 99;
+      border-bottom: 1px solid rgba(200,184,154,0.12);
+    }
+    .nav-mobile-drawer.open { transform: translateY(0); }
+    .nav-mobile-drawer a {
+      color: var(--cream);
+      text-decoration: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: 0.08em;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(200,184,154,0.1);
+      display: block;
+      transition: color 0.2s;
+    }
+    .nav-mobile-drawer a:hover { color: var(--accent); }
+
+    /* ── Sections ── */
+    section { padding: 64px 20px; }
+    #hero { padding: 0 20px 0; height: 100svh; }
+    #introduction { padding: 64px 20px; }
+    #toc { padding: 64px 20px; }
+    footer { padding: 28px 20px; flex-direction: column; gap: 14px; text-align: center; }
+
+    /* ── Hero ── */
+    .hero-bg-text {
+      font-size: clamp(80px, 22vw, 150px);
+      white-space: nowrap;
+    }
+    .hero-disciplines {
+      left: 50%;
+      transform: translateX(-50%);
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 10px;
+      bottom: 24px;
+      width: 90vw;
+      white-space: normal;
+      text-align: center;
+    }
+    .hero-disciplines span { font-size: 0.65rem; letter-spacing: 0.12em; }
+    .hero-topbar { display: none; }
+    .hero-bottombar { left: 20px; right: 20px; font-size: 0.75rem; }
+
+    /* ── Introduction ── */
+    .intro-inner { gap: 20px; }
+    #introduction > div[style*="font-size:clamp(200px"] { display: none; }
+
+    /* ── TOC ── */
+    .toc-inner { grid-template-columns: 1fr; gap: 28px; }
+    .toc-title { font-size: clamp(48px, 14vw, 80px); }
+    .toc-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .toc-item { padding: 12px 14px; font-size: 0.8rem; gap: 8px; }
+    .toc-num { font-size: 0.6rem; }
+
+    /* ── About ── */
+    #about { grid-template-columns: 1fr; gap: 32px; }
+    .about-photo { min-height: 300px; }
+    .about-stats { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    .stat-box { padding: 24px 16px; }
+    .stat-number { font-size: 40px; }
+
+    /* ── Education ── */
+    .edu-deco-topright, .edu-deco-bottomright, .edu-deco-dots,
+    .edu-deco-glow, .edu-deco-vline { display: none; }
+    .edu-inner { max-width: 100%; }
+    .edu-block { grid-template-columns: 80px 1fr; gap: 20px; padding: 32px 0; }
+    .edu-year { font-size: 1.4rem; }
+    .edu-degree { font-size: 1.6rem; }
+
+    /* ── Experience ── */
+    .exp-layout { grid-template-columns: 1fr; }
+    .exp-image-col { display: none; }
+    .exp-card { padding: 32px 24px; }
+    .exp-role { font-size: 1.6rem; }
+
+    /* ── Skills ── */
+    .skills-layout { grid-template-columns: 1fr; gap: 32px; }
+    .skills-radial-row { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .skill-radial svg { width: 72px; height: 72px; }
+    .skill-radial-pct { font-size: 0.85rem; }
+    .skill-radial-label { font-size: 0.7rem; }
+    .skill-bar-wrap { width: 80px; }
+
+    /* ── Portfolio ── */
+    .portfolio-filters { gap: 6px; }
+    .filter-btn { padding: 8px 14px; font-size: 0.62rem; }
+    .portfolio-grid { columns: 1; }
+    .portfolio-item { min-height: 200px; }
+    .portfolio-thumb { min-height: 200px; }
+    .portfolio-category-sep { gap: 12px; padding: 40px 0 20px; }
+    .pcs-name { font-size: clamp(22px, 6vw, 36px); }
+    .photo-subnav { gap: 0; }
+    .photo-sub-btn { padding: 8px 12px; font-size: 0.6rem; letter-spacing: 0.12em; }
+
+    /* Video grid: single column on mobile */
+    .video-grid { grid-template-columns: 1fr; }
+    .video-card { grid-column: span 1 !important; min-height: 160px; padding: 24px 20px 20px; }
+    .vc-index { font-size: 2.8rem; }
+    .vc-title { font-size: 1.3rem; }
+
+    /* ── Contact ── */
+    .contact-inner { grid-template-columns: 1fr; gap: 28px; }
+    .contact-info-grid { grid-template-columns: 1fr; }
+    .contact-tagline { font-size: 0.95rem; margin-bottom: 28px; }
+
+    /* ── Fixed scroll nav ── */
+    .fixed-scroll-nav { bottom: 16px; right: 16px; }
+    .scroll-btn { width: 36px; height: 36px; }
+
+    /* ── Lightbox ── */
+    .lightbox-nav.prev { left: 8px; }
+    .lightbox-nav.next { right: 8px; }
+    .lightbox-close { top: 12px; right: 12px; }
+    .lightbox-caption { font-size: 0.6rem; bottom: 12px; }
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — SMALL MOBILE  (≤480px)
+  ═══════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    /* Hero text scales down further */
+    .hero-bg-text { font-size: clamp(64px, 20vw, 110px); }
+    .hero-disciplines span { font-size: 0.58rem; }
+
+    /* TOC single column */
+    .toc-grid { grid-template-columns: 1fr; }
+
+    /* Stats single column */
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .stat-number { font-size: 36px; }
+
+    /* Education tighter */
+    .edu-block { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Skills rings: 2 per row */
+    .skills-radial-row { grid-template-columns: repeat(2, 1fr); }
+
+    /* Portfolio */
+    .portfolio-grid { columns: 1; }
+    .filter-btn { padding: 7px 10px; font-size: 0.58rem; }
+
+    /* Video cards */
+    .video-card { padding: 20px 16px 16px; }
+
+    /* Contact info */
+    .contact-info-grid { grid-template-columns: 1fr; }
+
+    /* Section padding */
+    section { padding: 52px 16px; }
+    #hero { padding: 0 16px 0; }
+    #introduction, #toc { padding: 52px 16px; }
+    nav { padding: 14px 16px; }
+    footer { padding: 24px 16px; }
   }
   /* Fixed scroll nav */
   .fixed-scroll-nav {
@@ -1582,6 +1886,92 @@
     height: 1px;
     background: rgba(232,224,208,0.2);
   }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .lightbox.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .lightbox-img {
+    max-width: 92vw;
+    max-height: 92vh;
+    object-fit: contain;
+    border: 1px solid rgba(200,184,154,0.1);
+    transform: scale(0.95);
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .lightbox.open .lightbox-img {
+    transform: scale(1);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    background: none;
+    border: 1px solid rgba(232,224,208,0.25);
+    color: var(--cream);
+    font-size: 1.2rem;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .lightbox-close:hover {
+    background: rgba(232,224,208,0.1);
+    border-color: var(--cream);
+  }
+  .lightbox-caption {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(232,224,208,0.45);
+    white-space: nowrap;
+  }
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 1px solid rgba(232,224,208,0.2);
+    color: var(--cream);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(232,224,208,0.1); }
+  .lightbox-nav.prev { left: 24px; }
+  .lightbox-nav.next { right: 24px; }
+  .lightbox-nav.hidden { opacity: 0; pointer-events: none; }
+
+  /* Clickable cursor on items with images */
+  .portfolio-item img.photo-img[src]:not([src=""]) { cursor: pointer; }
+
+  /* Hamburger — hidden by default (desktop) */
+  .nav-hamburger { display: none; }
 </style>
 </head>
 <body>
@@ -1601,7 +1991,21 @@
     <li><a href="#portfolio">Portfolio</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <!-- Hamburger — mobile only -->
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" style="display:none;">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile nav drawer -->
+<div class="nav-mobile-drawer" id="navMobileDrawer">
+  <a href="#about"      onclick="closeMobileNav()">About</a>
+  <a href="#education"  onclick="closeMobileNav()">Education</a>
+  <a href="#experience" onclick="closeMobileNav()">Experience</a>
+  <a href="#skills"     onclick="closeMobileNav()">Skills</a>
+  <a href="#portfolio"  onclick="closeMobileNav()">Portfolio</a>
+  <a href="#contact"    onclick="closeMobileNav()">Contact</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -1915,82 +2319,185 @@
     <span class="pcs-line"></span>
     <span class="pcs-count">10 works</span>
   </div>
+  <!-- Photography sub-category nav -->
+  <div class="photo-subnav reveal">
+    <button class="photo-sub-btn active" data-subcat="all">All</button>
+    <button class="photo-sub-btn" data-subcat="kiddie">Kiddie</button>
+    <button class="photo-sub-btn" data-subcat="debut">Debut</button>
+    <button class="photo-sub-btn" data-subcat="adult">Adult Portraits</button>
+    <button class="photo-sub-btn" data-subcat="christening">Christening</button>
+    <button class="photo-sub-btn" data-subcat="pre-debut">Pre-Debut</button>
+    <button class="photo-sub-btn" data-subcat="wedding">Wedding</button>
+    <button class="photo-sub-btn" data-subcat="pre-wedding">Pre-Wedding</button>
+    <button class="photo-sub-btn" data-subcat="corporate">Corporate</button>
+    <button class="photo-sub-btn" data-subcat="family">Family</button>
+  </div>
   <div class="portfolio-grid" id="portfolioGrid">
 
-    <div class="portfolio-item wide cat-photo" data-cat="photo">
+    <!-- Wedding: 1 landscape -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="wedding">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Wedding · 1 of 1" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="10" width="40" height="30" rx="3" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="24" cy="25" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M18 10 L20 6 H28 L30 10" stroke="#e8e0d0" stroke-width="1.5" stroke-linejoin="round"/>
-            <circle cx="24" cy="25" r="3" fill="#e8e0d0" opacity="0.4"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="16" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="16" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M6 42 C6 33 12 28 18 28" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M30 28 C36 28 42 33 42 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M18 28 C20 26 22 25 24 25 C26 25 28 26 30 28" stroke="#e8e0d0" stroke-width="1.2" stroke-linecap="round"/>
+            <!-- rings -->
+            <circle cx="21" cy="23" r="2" stroke="#e8e0d0" stroke-width="1" opacity="0.5"/>
+            <circle cx="27" cy="23" r="2" stroke="#e8e0d0" stroke-width="1" opacity="0.5"/>
           </svg>
-          <span class="ph-label">Birthday Event</span>
+          <span class="ph-label">Wedding · 1 of 1</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Birthday Event</div>
+        <div class="portfolio-cat">Photography · Wedding</div>
+        <div class="portfolio-title">Wedding Session</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Family: landscape 1 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="family">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Family · 1 of 2" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="18" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M8 40 C8 31 16 26 24 26 C32 26 40 31 40 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+          <svg width="48" height="40" viewBox="0 0 56 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="14" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="28" cy="12" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="42" cy="14" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M2 40 C2 32 8 28 14 28" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M42 28 C48 28 54 32 54 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M14 28 C18 26 22 25 28 25 C34 25 38 26 42 28" stroke="#e8e0d0" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
-          <span class="ph-label">Portrait Studio</span>
+          <span class="ph-label">Family · 1 of 2</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Portrait Studio</div>
+        <div class="portfolio-cat">Photography · Family</div>
+        <div class="portfolio-title">Family Session 1</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Family: landscape 2 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="family">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Family · 2 of 2" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="18" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M8 40 C8 31 16 26 24 26 C32 26 40 31 40 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <rect x="30" y="28" width="14" height="10" rx="2" stroke="#e8e0d0" stroke-width="1.2"/>
+          <svg width="48" height="40" viewBox="0 0 56 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="13" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="36" cy="13" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M5 40 C5 31 12 27 20 27" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M36 27 C44 27 51 31 51 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M20 27 C24 25 32 25 36 27" stroke="#e8e0d0" stroke-width="1.2" stroke-linecap="round"/>
+            <!-- small child -->
+            <circle cx="28" cy="32" r="4" stroke="#e8e0d0" stroke-width="1.2" opacity="0.5"/>
           </svg>
-          <span class="ph-label">Corporate Portrait</span>
+          <span class="ph-label">Family · 2 of 2</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Corporate Portrait</div>
+        <div class="portfolio-cat">Photography · Family</div>
+        <div class="portfolio-title">Family Session 2</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Corporate: 1 landscape -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="corporate">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Corporate · 1 of 1" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="10" width="40" height="30" rx="3" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="24" cy="25" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M18 10 L20 6 H28 L30 10" stroke="#e8e0d0" stroke-width="1.5" stroke-linejoin="round"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="15" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- tie -->
+            <path d="M22 27 L21 33 L24 36 L27 33 L26 27 Z" stroke="#e8e0d0" stroke-width="1" fill="none" opacity="0.45"/>
           </svg>
-          <span class="ph-label">Event Photography</span>
+          <span class="ph-label">Corporate · 1 of 1</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Event Photography</div>
+        <div class="portfolio-cat">Photography · Corporate</div>
+        <div class="portfolio-title">Corporate Session</div>
+      </div>
+    </div>
+
+    <!-- Adult: portrait 1 -->
+    <div class="portfolio-item tall cat-photo" data-cat="photo" data-subcat="adult">
+    
+      <img src="./samples/images/adult/484434549_1103475275155807_7514178908259151950_n.jpg" alt="Adult · 1 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="56" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 44 C12 34 18 29 24 29 C30 29 36 34 36 44" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="24" y1="44" x2="24" y2="54" stroke="#e8e0d0" stroke-width="1" opacity="0.3"/>
+            <line x1="16" y1="54" x2="32" y2="54" stroke="#e8e0d0" stroke-width="1" opacity="0.3"/>
+          </svg>
+          <span class="ph-label">Adult · 1 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Adult</div>
+        <div class="portfolio-title">Adult Session 1</div>
+      </div>
+    </div>
+
+    <!-- Adult: portrait 2 -->
+    <div class="portfolio-item tall cat-photo" data-cat="photo" data-subcat="adult">
+      
+      <img src="./samples/images/adult/485003444_1105523391617662_7025170427636021866_n.jpg" alt="Adult · 2 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="56" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 44 C12 34 18 29 24 29 C30 29 36 34 36 44" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M16 8 Q24 3 32 8" stroke="#e8e0d0" stroke-width="1" fill="none" opacity="0.4"/>
+          </svg>
+          <span class="ph-label">Adult · 2 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Adult</div>
+        <div class="portfolio-title">Adult Session 2</div>
+      </div>
+    </div>
+
+    <!-- Adult: portrait 3 -->
+    <div class="portfolio-item tall cat-photo" data-cat="photo" data-subcat="adult">
+      
+      <img src="./samples/images/adult/485161650_1103473331822668_3187245064210729419_n.jpg" alt="Adult · 3 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="56" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 44 C12 34 18 29 24 29 C30 29 36 34 36 44" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 12 L9 15 L12 16 L9 17 L8 20 L7 17 L4 16 L7 15 Z" fill="#e8e0d0" opacity="0.35"/>
+            <path d="M40 12 L41 14 L43 15 L41 16 L40 18 L39 16 L37 15 L39 14 Z" fill="#e8e0d0" opacity="0.3"/>
+          </svg>
+          <span class="ph-label">Adult · 3 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Adult</div>
+        <div class="portfolio-title">Adult Session 3</div>
       </div>
     </div>
 
     <!-- ── Filler card 1: stat/quote ── -->
-    <div class="portfolio-filler" data-cat="photo">
+    <div class="portfolio-filler" data-cat="photo" data-subcat="all">
       <div class="pf-inner">
         <div class="pf-bg-lines">
           <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -2013,123 +2520,387 @@
       </div>
     </div>
 
-    <div class="portfolio-item wide cat-photo" data-cat="photo">
+    <!-- Pre-Wedding: landscape 1 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Pre-Wedding · 1 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="48" height="40" viewBox="0 0 56 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="36" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M4 38 C4 30 12 26 20 26" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M52 38 C52 30 44 26 36 26" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M20 26 C24 24 32 24 36 26 C40 28 44 32 44 38" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M12 38 C12 32 16 28 20 26" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M6 40 C6 31 12 27 18 27" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M30 27 C36 27 42 31 42 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- heart between -->
+            <path d="M21 22 C21 20 24 19 24 21 C24 19 27 20 27 22 C27 25 24 27 24 27 C24 27 21 25 21 22Z" fill="#e8e0d0" opacity="0.35"/>
           </svg>
-          <span class="ph-label">Family Portrait</span>
+          <span class="ph-label">Pre-Wedding · 1 of 4</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Family Portrait</div>
+        <div class="portfolio-cat">Photography · Pre-Wedding</div>
+        <div class="portfolio-title">Pre-Wedding Session 1</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Pre-Wedding: landscape 2 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Pre-Wedding · 2 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="16" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M12 44 C12 34 18 28 24 28 C30 28 36 34 36 44" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M30 8 Q36 4 38 10" stroke="#e8e0d0" stroke-width="1.2" stroke-linecap="round"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M6 40 C6 31 12 27 18 27" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M30 27 C36 27 42 31 42 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- rings linked -->
+            <circle cx="20" cy="24" r="2.5" stroke="#e8e0d0" stroke-width="1" opacity="0.5"/>
+            <circle cx="28" cy="24" r="2.5" stroke="#e8e0d0" stroke-width="1" opacity="0.5"/>
           </svg>
-          <span class="ph-label">Fashion Portrait</span>
+          <span class="ph-label">Pre-Wedding · 2 of 4</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Fashion Portrait</div>
+        <div class="portfolio-cat">Photography · Pre-Wedding</div>
+        <div class="portfolio-title">Pre-Wedding Session 2</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Pre-Wedding: landscape 3 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Pre-Wedding · 3 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="18" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M8 42 C8 32 16 28 24 28 C32 28 40 32 40 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M36 6 L38 14 M38 14 L46 12 M38 14 L42 20" stroke="#e8e0d0" stroke-width="1.2" stroke-linecap="round"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M6 40 C6 31 12 27 18 27" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M30 27 C36 27 42 31 42 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- flower -->
+            <circle cx="24" cy="8" r="2" stroke="#e8e0d0" stroke-width="1" opacity="0.4"/>
+            <circle cx="28" cy="10" r="1.5" stroke="#e8e0d0" stroke-width="1" opacity="0.35"/>
+            <circle cx="20" cy="10" r="1.5" stroke="#e8e0d0" stroke-width="1" opacity="0.35"/>
           </svg>
-          <span class="ph-label">Senior Portrait</span>
+          <span class="ph-label">Pre-Wedding · 3 of 4</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Senior Portrait</div>
+        <div class="portfolio-cat">Photography · Pre-Wedding</div>
+        <div class="portfolio-title">Pre-Wedding Session 3</div>
       </div>
     </div>
 
-    <div class="portfolio-item wide cat-photo" data-cat="photo">
+    <!-- Pre-Wedding: landscape 4 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-wedding">
+      <!-- Replace src="" with your image path -->
+      <img src="" alt="Pre-Wedding · 4 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="52" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="16" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="28" cy="14" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="44" cy="16" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M2 36 C2 28 8 24 14 24" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M46 24 C52 24 58 28 58 36" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M14 24 C18 22 22 22 28 22 C34 22 38 22 46 24" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="15" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M6 40 C6 31 12 27 18 27" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M30 27 C36 27 42 31 42 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- sparkles -->
+            <path d="M8 10 L9 13 L12 14 L9 15 L8 18 L7 15 L4 14 L7 13 Z" fill="#e8e0d0" opacity="0.35"/>
+            <path d="M40 8 L41 10 L43 11 L41 12 L40 14 L39 12 L37 11 L39 10 Z" fill="#e8e0d0" opacity="0.3"/>
           </svg>
-          <span class="ph-label">Group Event</span>
+          <span class="ph-label">Pre-Wedding · 4 of 4</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Group Event</div>
+        <div class="portfolio-cat">Photography · Pre-Wedding</div>
+        <div class="portfolio-title">Pre-Wedding Session 4</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Debut: landscape 1 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="debut">
+      
+      <img src="./samples/images/debu/debu-talaga.jpg" alt="Debut · 1 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 36 L18 22 L26 30 L32 24 L42 36Z" stroke="#e8e0d0" stroke-width="1.5" stroke-linejoin="round"/>
-            <circle cx="34" cy="16" r="5" stroke="#e8e0d0" stroke-width="1.5"/>
-            <rect x="4" y="8" width="40" height="32" rx="3" stroke="#e8e0d0" stroke-width="1.5"/>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="15" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M16 10 Q24 4 32 10" stroke="#e8e0d0" stroke-width="1.2" stroke-linecap="round" fill="none"/>
           </svg>
-          <span class="ph-label">Lifestyle Photography</span>
+          <span class="ph-label">Debut · 1 of 4</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Lifestyle Photography</div>
+        <div class="portfolio-cat">Photography · Debut</div>
+        <div class="portfolio-title">Debut Session 1</div>
       </div>
     </div>
 
-    <div class="portfolio-item cat-photo" data-cat="photo">
+    <!-- Debut: portrait (tall) -->
+    <div class="portfolio-item tall cat-photo" data-cat="photo" data-subcat="debut">
+  
+      <img src="./samples/images/debu/DSC07047.jpg" alt="Debut · 2 of 4" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
-          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="10" width="40" height="30" rx="3" stroke="#e8e0d0" stroke-width="1.5"/>
-            <circle cx="24" cy="25" r="8" stroke="#e8e0d0" stroke-width="1.5"/>
-            <path d="M18 10 L20 6 H28 L30 10" stroke="#e8e0d0" stroke-width="1.5" stroke-linejoin="round"/>
-            <line x1="8" y1="18" x2="14" y2="18" stroke="#e8e0d0" stroke-width="1.2"/>
+          <svg width="44" height="56" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 44 C12 34 18 29 24 29 C30 29 36 34 36 44" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- crown -->
+            <path d="M14 10 L17 4 L24 8 L31 4 L34 10 Z" stroke="#e8e0d0" stroke-width="1.2" fill="none" opacity="0.6"/>
+            <circle cx="17" cy="4" r="1" fill="#e8e0d0" opacity="0.6"/>
+            <circle cx="31" cy="4" r="1" fill="#e8e0d0" opacity="0.6"/>
+            <circle cx="24" cy="8" r="1" fill="#e8e0d0" opacity="0.6"/>
           </svg>
-          <span class="ph-label">Corporate Events</span>
+          <span class="ph-label">Debut · 2 of 4</span>
         </div>
       </div>
       <div class="portfolio-overlay">
-        <div class="portfolio-cat">Photography</div>
-        <div class="portfolio-title">Corporate Events</div>
+        <div class="portfolio-cat">Photography · Debut</div>
+        <div class="portfolio-title">Debut Session 2</div>
       </div>
     </div>
+
+    <!-- Debut: landscape 2 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="debut">
+     
+      <img src="./samples/images/debu/portrait.jpg" alt="Debut · 3 of 4" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="15" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- roses left and right -->
+            <circle cx="10" cy="30" r="3" stroke="#e8e0d0" stroke-width="1" opacity="0.45"/>
+            <circle cx="38" cy="30" r="3" stroke="#e8e0d0" stroke-width="1" opacity="0.45"/>
+          </svg>
+          <span class="ph-label">Debut · 3 of 4</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Debut</div>
+        <div class="portfolio-title">Debut Session 3</div>
+      </div>
+    </div>
+
+    <!-- Debut: landscape 3 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="debut">
+     
+      <img src="./samples/images/debu/stolen.jpg" alt="Debut · 4 of 4" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="15" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- sparkles -->
+            <path d="M8 12 L9 15 L12 16 L9 17 L8 20 L7 17 L4 16 L7 15 Z" fill="#e8e0d0" opacity="0.4"/>
+            <path d="M40 10 L41 12 L43 13 L41 14 L40 16 L39 14 L37 13 L39 12 Z" fill="#e8e0d0" opacity="0.35"/>
+          </svg>
+          <span class="ph-label">Debut · 4 of 4</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Debut</div>
+        <div class="portfolio-title">Debut Session 4</div>
+      </div>
+    </div>
+
+    <!-- Kiddie: landscape 1 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="kiddie">
+      
+      <img src="./samples/images/kiddie/family.jpg" alt="Kiddie · 1 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M10 40 C10 30 17 26 24 26 C31 26 38 30 38 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- star/sparkle top right -->
+            <path d="M38 6 L39 9 L42 10 L39 11 L38 14 L37 11 L34 10 L37 9 Z" fill="#e8e0d0" opacity="0.5"/>
+          </svg>
+          <span class="ph-label">Kiddie · 1 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Kiddie</div>
+        <div class="portfolio-title">Kiddie Session 1</div>
+      </div>
+    </div>
+
+    <!-- Kiddie: portrait (tall) -->
+    <div class="portfolio-item tall cat-photo" data-cat="photo" data-subcat="kiddie">
+      
+      <img src="./samples/images/kiddie/kid-solo.jpg" alt="Kiddie · 2 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="56" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M10 44 C10 34 17 30 24 30 C31 30 38 34 38 44" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- balloon strings -->
+            <circle cx="14" cy="6" r="4" stroke="#e8e0d0" stroke-width="1.2" opacity="0.5"/>
+            <line x1="14" y1="10" x2="14" y2="16" stroke="#e8e0d0" stroke-width="1" opacity="0.5"/>
+            <circle cx="34" cy="8" r="3" stroke="#e8e0d0" stroke-width="1.2" opacity="0.4"/>
+            <line x1="34" y1="11" x2="34" y2="16" stroke="#e8e0d0" stroke-width="1" opacity="0.4"/>
+          </svg>
+          <span class="ph-label">Kiddie · 2 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Kiddie</div>
+        <div class="portfolio-title">Kiddie Session 2</div>
+      </div>
+    </div>
+
+    <!-- Kiddie: landscape 2 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="kiddie">
+
+      <img src="./samples/images/kiddie/VIN00546.jpg" alt="Kiddie · 3 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="18" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M6 40 C6 32 11 28 17 28" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M31 28 C37 28 42 32 42 40" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- heart -->
+            <path d="M21 26 C21 24 24 22 24 25 C24 22 27 24 27 26 C27 29 24 31 24 31 C24 31 21 29 21 26Z" fill="#e8e0d0" opacity="0.4"/>
+          </svg>
+          <span class="ph-label">Kiddie · 3 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Kiddie</div>
+        <div class="portfolio-title">Kiddie Session 3</div>
+      </div>
+    </div>
+
+    <!-- Christening: landscape 1 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="christening">
+      
+      <img src="./samples/images/christening/484853166_976644791272850_7640328039117171263_n.jpg" alt="Christening · 1 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- cross -->
+            <line x1="24" y1="4" x2="24" y2="10" stroke="#e8e0d0" stroke-width="1.2" opacity="0.5"/>
+            <line x1="21" y1="6" x2="27" y2="6" stroke="#e8e0d0" stroke-width="1.2" opacity="0.5"/>
+          </svg>
+          <span class="ph-label">Christening · 1 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Christening</div>
+        <div class="portfolio-title">Christening Session 1</div>
+      </div>
+    </div>
+
+    <!-- Christening: landscape 2 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="christening">
+     
+      <img src="./samples/images/christening/_JAY4307.jpg" alt="Christening · 2 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- candle -->
+            <rect x="22" y="4" width="4" height="7" rx="1" stroke="#e8e0d0" stroke-width="1" opacity="0.45"/>
+            <path d="M24 3 Q25 1 24 0 Q23 1 24 3Z" fill="#e8e0d0" opacity="0.45"/>
+          </svg>
+          <span class="ph-label">Christening · 2 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Christening</div>
+        <div class="portfolio-title">Christening Session 2</div>
+      </div>
+    </div>
+
+    <!-- Christening: landscape 3 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="christening">
+      
+      <img src="./samples/images/christening/DSC05797.jpg" alt="Christening · 3 of 3" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="17" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <circle cx="30" cy="17" r="6" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M7 42 C7 33 12 28 17 28" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M31 28 C36 28 41 33 41 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="ph-label">Christening · 3 of 3</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Christening</div>
+        <div class="portfolio-title">Christening Session 3</div>
+      </div>
+    </div>
+
+    <!-- Pre-Debut: landscape 1 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-debut">
+      
+      <img src="./samples/images/pre-debut/candid2.JPG" alt="Pre-Debut · 1 of 2" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="15" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- half crown / tiara -->
+            <path d="M16 10 L19 6 L24 9 L29 6 L32 10" stroke="#e8e0d0" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="ph-label">Pre-Debut · 1 of 2</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Pre-Debut</div>
+        <div class="portfolio-title">Pre-Debut Session 1</div>
+      </div>
+    </div>
+
+    <!-- Pre-Debut: landscape 2 -->
+    <div class="portfolio-item cat-photo" data-cat="photo" data-subcat="pre-debut">
+   
+      <img src="./samples/images/pre-debut/candid3.jpg" alt="Pre-Debut · 2 of 2" class="photo-img">
+      <div class="portfolio-thumb">
+        <div class="ph-frame"></div>
+        <div class="ph-icon">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="15" r="7" stroke="#e8e0d0" stroke-width="1.5"/>
+            <path d="M12 42 C12 32 18 27 24 27 C30 27 36 32 36 42" stroke="#e8e0d0" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- flower -->
+            <circle cx="24" cy="6" r="2" stroke="#e8e0d0" stroke-width="1" opacity="0.45"/>
+            <circle cx="28" cy="8" r="1.5" stroke="#e8e0d0" stroke-width="1" opacity="0.4"/>
+            <circle cx="20" cy="8" r="1.5" stroke="#e8e0d0" stroke-width="1" opacity="0.4"/>
+          </svg>
+          <span class="ph-label">Pre-Debut · 2 of 2</span>
+        </div>
+      </div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-cat">Photography · Pre-Debut</div>
+        <div class="portfolio-title">Pre-Debut Session 2</div>
+      </div>
+    </div>
+
+
 
     <!-- ── Filler card 2: disciplines ── -->
-    <div class="portfolio-filler" data-cat="photo">
+    <div class="portfolio-filler" data-cat="photo" data-subcat="all">
       <div class="pf-inner">
         <div class="pf-bg-lines">
           <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -2164,6 +2935,7 @@
   <div class="video-grid">
 
     <div class="video-card wide">
+      <video src=""></video>
       <div class="vc-top">
         <span class="vc-index">01</span>
         <div class="vc-play">
@@ -2172,12 +2944,14 @@
       </div>
       <div class="vc-bottom">
         <div class="vc-cat">Videography</div>
+       
         <div class="vc-title">B2B Marketing</div>
         <div class="vc-desc">Corporate brand video targeting business-to-business clients and stakeholders.</div>
       </div>
     </div>
 
     <div class="video-card">
+      <video src=""></video>
       <div class="vc-top">
         <span class="vc-index">02</span>
         <div class="vc-play">
@@ -2192,6 +2966,7 @@
     </div>
 
     <div class="video-card wide">
+      <video src=""></video>
       <div class="vc-top">
         <span class="vc-index">03</span>
         <div class="vc-play">
@@ -2218,6 +2993,7 @@
   <div class="portfolio-grid">
 
     <div class="portfolio-item wide cat-graphics" data-cat="graphics">
+      <img src="" alt="Social Media Creatives" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2237,6 +3013,7 @@
     </div>
 
     <div class="portfolio-item cat-graphics" data-cat="graphics">
+      <img src="" alt="Event Banners" class="photo-img">
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2268,6 +3045,7 @@
   <div class="portfolio-grid">
 
     <div class="portfolio-item cat-animation" data-cat="animation">
+      <video src=""></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2287,6 +3065,7 @@
     </div>
 
     <div class="portfolio-item cat-animation" data-cat="animation">
+      <video src=""></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2305,6 +3084,7 @@
     </div>
 
     <div class="portfolio-item cat-animation" data-cat="animation">
+      <video src=""></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -2336,6 +3116,7 @@
   <div class="video-grid">
 
     <div class="video-card wide">
+      <video src=""></video>
       <div class="vc-top">
         <span class="vc-index">01</span>
         <div class="vc-play">
@@ -2350,6 +3131,7 @@
     </div>
 
     <div class="video-card">
+      <video src=""></video>
       <div class="vc-top">
         <span class="vc-index">02</span>
         <div class="vc-play">
@@ -2784,6 +3566,159 @@
     upBtn.style.opacity   = idx === 0 ? '0.3' : '1';
     downBtn.style.opacity = idx === sections.length - 1 ? '0.3' : '1';
   }, { passive: true });
+})();
+</script>
+
+<script>
+// Photography sub-category filter
+(function () {
+  const subBtns = document.querySelectorAll('.photo-sub-btn');
+  if (!subBtns.length) return;
+
+  subBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      subBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      const subcat = btn.dataset.subcat;
+      const photoItems = document.querySelectorAll('.portfolio-item.cat-photo, .portfolio-filler[data-cat="photo"]');
+
+      photoItems.forEach(function(item) {
+        if (subcat === 'all' || item.dataset.subcat === subcat) {
+          item.style.display = '';
+          setTimeout(function() { item.style.opacity = '1'; item.style.transform = ''; }, 10);
+        } else {
+          item.style.opacity = '0';
+          item.style.transform = 'scale(0.97)';
+          setTimeout(function() { item.style.display = 'none'; }, 300);
+        }
+      });
+    });
+  });
+
+  // Add transition to items
+  document.querySelectorAll('.portfolio-item.cat-photo, .portfolio-filler[data-cat="photo"]').forEach(function(item) {
+    item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+  });
+})();
+</script>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&#x2715;</button>
+  <button class="lightbox-nav prev" id="lightboxPrev">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav next" id="lightboxNext">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+(function () {
+  const lightbox     = document.getElementById('lightbox');
+  const lbImg        = document.getElementById('lightboxImg');
+  const lbCaption    = document.getElementById('lightboxCaption');
+  const lbClose      = document.getElementById('lightboxClose');
+  const lbPrev       = document.getElementById('lightboxPrev');
+  const lbNext       = document.getElementById('lightboxNext');
+
+  let images = [];   // all loaded photo-img elements with a src
+  let current = 0;
+
+  function getImages() {
+    return Array.from(document.querySelectorAll('.photo-img[src]:not([src=""])'));
+  }
+
+  function open(img) {
+    images = getImages();
+    current = images.indexOf(img);
+    show(current);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function show(idx) {
+    const img = images[idx];
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCaption.textContent = img.alt;
+    lbPrev.classList.toggle('hidden', idx === 0);
+    lbNext.classList.toggle('hidden', idx === images.length - 1);
+    current = idx;
+  }
+
+  // Attach click to each portfolio-item that has a loaded image
+  function bindImageClicks() {
+    document.querySelectorAll('.portfolio-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        const img = item.querySelector('.photo-img');
+        if (img && img.getAttribute('src') && img.getAttribute('src') !== '') {
+          item.style.cursor = 'pointer';
+          open(img);
+        }
+      });
+    });
+  }
+  bindImageClicks();
+
+  lbClose.addEventListener('click', close);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) close();
+  });
+  lbPrev.addEventListener('click', function () { if (current > 0) show(current - 1); });
+  lbNext.addEventListener('click', function () { if (current < images.length - 1) show(current + 1); });
+
+  // Keyboard nav
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft' && current > 0) show(current - 1);
+    if (e.key === 'ArrowRight' && current < images.length - 1) show(current + 1);
+  });
+})();
+</script>
+
+<script>
+/* ── Hamburger / mobile nav ── */
+(function() {
+  var btn    = document.getElementById('navHamburger');
+  var drawer = document.getElementById('navMobileDrawer');
+
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function updateHamburger() {
+    if (isMobile()) {
+      btn.style.display = 'flex';
+    } else {
+      btn.style.display = 'none';
+      drawer.classList.remove('open');
+      btn.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  window.closeMobileNav = function() {
+    drawer.classList.remove('open');
+    btn.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  btn.addEventListener('click', function() {
+    var isOpen = drawer.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  window.addEventListener('resize', updateHamburger);
+  updateHamburger();
 })();
 </script>
 </body>
