@@ -1792,6 +1792,8 @@
     .hero-disciplines span { font-size: 0.65rem; letter-spacing: 0.12em; }
     .hero-topbar { display: none; }
     .hero-bottombar { left: 20px; right: 20px; font-size: 0.75rem; }
+    /* Hero content padding override for mobile */
+    .hero-content-padded { padding: 0 20px 32px !important; }
 
     /* ── Introduction ── */
     .intro-inner { gap: 20px; }
@@ -1904,6 +1906,118 @@
     nav { padding: 14px 16px; }
     footer { padding: 24px 16px; }
   }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — EXTRA SMALL MOBILE  (≤380px)
+  ═══════════════════════════════════════════ */
+  @media (max-width: 380px) {
+    .hero-bg-text { font-size: 56px; }
+    .toc-item { padding: 10px 12px; font-size: 0.72rem; }
+    .filter-btn { padding: 6px 8px; font-size: 0.54rem; }
+    .stat-number { font-size: 30px; }
+    .edu-degree { font-size: 1.3rem; }
+    .exp-role { font-size: 1.3rem; }
+    .skills-radial-row { grid-template-columns: repeat(2, 1fr); }
+    .skill-radial svg { width: 62px; height: 62px; }
+    .vc-title { font-size: 1.1rem; }
+    section { padding: 44px 14px; }
+    #introduction, #toc { padding: 44px 14px; }
+    nav { padding: 12px 14px; }
+  }
+
+  /* ═══════════════════════════════════════════
+     MOBILE UX IMPROVEMENTS — touch / tap
+  ═══════════════════════════════════════════ */
+
+  /* Ensure all interactive elements have min 44px tap targets on mobile */
+  @media (max-width: 768px) {
+    .filter-btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .toc-item {
+      min-height: 44px;
+    }
+    .photo-sub-btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .scroll-btn {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    .nav-hamburger {
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Improve hero bottombar on mobile — single column */
+    .hero-bottombar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      bottom: 72px; /* above disciplines bar */
+      font-size: 0.68rem;
+    }
+    /* About text is 1.9rem which is huge on mobile — scale down */
+    .about-text { font-size: 1.1rem; line-height: 1.7; }
+    .intro-text { font-size: 1.05rem !important; line-height: 1.75; }
+    .hero-desc { font-size: 1.1rem; }
+    /* Exp desc also 1.9rem — scale down */
+    .exp-desc { font-size: 1rem; }
+    /* Portfolio grid gap on mobile */
+    .portfolio-grid { column-gap: 2px; }
+    /* Contact inner - more breathing room */
+    .contact-inner { margin-top: 32px; }
+    /* Section labels smaller on mobile */
+    .section-label { font-size: 0.58rem; margin-bottom: 36px; }
+    /* Stat boxes: equal sizing on mobile */
+    .stat-box { padding: 20px 14px; }
+    /* exp cards: better padding */
+    .exp-card { padding: 28px 20px; }
+    /* Lightbox: full-width image on mobile */
+    .lightbox-img { max-width: 100vw; max-height: 80vh; border: none; }
+    /* Video modal: full width player */
+    .vmodal-player { max-width: 100vw; max-height: 70vh; border: none; }
+    /* Skill bar narrower on mobile */
+    .skill-bar-wrap { width: 70px; }
+    /* TOC grid consistent item sizing */
+    .toc-grid { gap: 6px; }
+    /* Hero disciplines: better spacing */
+    .hero-disciplines { bottom: 20px; }
+    /* Portfolio more link: easier tap */
+    .portfolio-more { padding: 14px 0; }
+    /* Contact links: easier tap */
+    .contact-link { padding: 16px 0; }
+    /* Hobby tags: touch friendly */
+    .hobby-tag { padding: 8px 14px; font-size: 0.65rem; }
+    /* Nav mobile drawer links: better spacing */
+    .nav-mobile-drawer a { padding: 18px 0; font-size: 2rem; }
+    /* intro-title: prevent overflow */
+    .intro-title { word-break: break-word; }
+    /* prevent horizontal scroll from decorative elements */
+    #hero, #introduction, #toc, #about, #education,
+    #experience, #skills, #portfolio, #contact {
+      overflow-x: hidden;
+    }
+    /* fixed scroll nav: slightly smaller on mobile */
+    .fixed-scroll-nav { bottom: 20px; right: 14px; }
+    /* Portfolio category separator text clamp */
+    .pcs-name { word-break: break-word; }
+    /* Section titles: let them wrap naturally */
+    .section-title { word-break: break-word; }
+    .edu-title { word-break: break-word; }
+    /* Skills: single column name not truncating */
+    .skill-name { font-size: 1rem; }
+    .skill-pct-label { font-size: 1rem; }
+  }
+
   /* Fixed scroll nav */
   .fixed-scroll-nav {
     position: fixed;
@@ -2142,7 +2256,7 @@
   <div class="hero-bg-text" id="heroText">
     <span class="hero-text-solid hero-letter" id="hL-PO">PO</span><span id="heroR" class="hero-text-r-wrap hero-letter" data-group="1"></span><span class="hero-text-hollow hero-letter" id="hL-T">T</span><span class="hero-text-hollow hero-letter" id="hL-F">F</span><span class="hero-text-hollow hero-letter" id="hL-O1">O</span><span id="heroL" class="hero-text-r-wrap hero-letter" data-group="4"></span><span class="hero-text-solid hero-letter" id="hL-I">I</span><span class="hero-text-solid hero-letter" id="hL-O2">O</span>
   </div>
-  <div class="hero-content" style="position:absolute;bottom:0;left:0;right:0;z-index:5;padding:0 48px 36px;">
+  <div class="hero-content hero-content-padded" style="position:absolute;bottom:0;left:0;right:0;z-index:5;padding:0 48px 36px;">
     <!-- Disciplines centered at bottom -->
     <div class="hero-disciplines">
       <span>Photography</span>
