@@ -741,6 +741,31 @@
     color: rgba(200,184,154,0.35);
     line-height: 1.8;
   }
+
+  /* ── Work snapshot real image ── */
+  .exp-snapshot-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    z-index: 1;
+    opacity: 0;          /* hidden until src is set */
+    transition: opacity 0.4s ease;
+  }
+  /* When the image has a real src, show it and hide placeholder decorations */
+  .exp-snapshot-img[src]:not([src=""]) {
+    opacity: 1;
+  }
+  .exp-snapshot-img[src]:not([src=""]) ~ .exp-placeholder-only {
+    display: none;
+  }
+  /* Keep gradient + label visible over real image */
+  .exp-img-gradient { z-index: 2; }
+  .exp-img-label    { z-index: 3; }
+  .exp-img-noise    { z-index: 2; }
   .exp-img-scanline {
     position: absolute;
     left: 0; right: 0;
@@ -1349,10 +1374,11 @@
     align-items: center;
     gap: 10px;
     margin-top: 20px;
+    margin-bottom: 56px;
     padding: 10px 0;
     text-decoration: none;
     color: var(--accent);
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     border-bottom: 1px solid rgba(200,184,154,0.2);
@@ -1679,7 +1705,8 @@
 
     /* Experience */
     .exp-layout { grid-template-columns: 1fr; }
-    .exp-image-col { display: none; }
+    .exp-image-col { display: flex; width: 100%; }
+    .exp-img-placeholder { aspect-ratio: 16 / 9; min-height: unset; }
 
     /* Skills */
     .skills-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -1795,6 +1822,26 @@
     /* Hero content padding override for mobile */
     .hero-content-padded { padding: 0 20px 32px !important; }
 
+    /* ── Hero photo: remove the desktop zoom/crop on mobile ── */
+    .hero-photo img {
+      transform: scale(1.0);
+      transform-origin: center 25%;
+      object-position: center 18%;
+    }
+
+    /* ── About photo: proper height and full-width display ── */
+    .about-photo {
+      min-height: 380px;
+      height: 380px;
+      width: 100%;
+    }
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
+    }
+
     /* ── Introduction ── */
     .intro-inner { gap: 20px; }
     #introduction > div[style*="font-size:clamp(200px"] { display: none; }
@@ -1808,7 +1855,9 @@
 
     /* ── About ── */
     #about { grid-template-columns: 1fr; gap: 32px; }
-    .about-photo { min-height: 300px; }
+    .about-right { height: auto; }
+    .about-right .about-photo { flex: none; }
+    .about-photo { min-height: 380px; height: 380px; width: 100%; }
     .about-stats { grid-template-columns: repeat(2, 1fr); gap: 2px; }
     .stat-box { padding: 24px 16px; }
     .stat-number { font-size: 40px; }
@@ -1823,7 +1872,8 @@
 
     /* ── Experience ── */
     .exp-layout { grid-template-columns: 1fr; }
-    .exp-image-col { display: none; }
+    .exp-image-col { display: flex; width: 100%; margin-top: 4px; }
+    .exp-img-placeholder { aspect-ratio: 16 / 9; min-height: unset; }
     .exp-card { padding: 32px 24px; }
     .exp-role { font-size: 1.6rem; }
 
@@ -2457,13 +2507,21 @@
 
     <!-- Right: image placeholder -->
     <div class="exp-image-col reveal reveal-delay-3">
-      <div class="exp-img-placeholder">
-        <div class="exp-img-inner-brackets"></div>
+      <!-- ↓↓↓ REPLACE src="" WITH YOUR IMAGE PATH e.g. src="images/work-snapshot.jpg" ↓↓↓ -->
+      <div class="exp-img-placeholder exp-img-has-photo">
+        <img
+          src="./samples/bgremoved.png"
+          alt=""
+          class="exp-snapshot-img"
+          id="expSnapshotImg"
+        >
+        <!-- Fallback decorative layer shown when src is empty -->
+        <div class="exp-img-inner-brackets exp-placeholder-only"></div>
         <div class="exp-img-gradient"></div>
         <div class="exp-img-noise"></div>
-        <div class="exp-img-crosshair"></div>
-        <div class="exp-img-scanline"></div>
-        <div class="exp-img-center">
+        <div class="exp-img-crosshair exp-placeholder-only"></div>
+        <div class="exp-img-scanline exp-placeholder-only"></div>
+        <div class="exp-img-center exp-placeholder-only">
           <svg class="exp-img-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="10" width="40" height="30" rx="2" stroke="currentColor" stroke-width="1.5"/>
             <circle cx="16" cy="20" r="4" stroke="currentColor" stroke-width="1.5"/>
@@ -2472,13 +2530,13 @@
           <div class="exp-img-center-text">Your Image<br>Here</div>
         </div>
         <div class="exp-img-label">
-          <div class="exp-img-label-title">Work Snapshot</div>
-          <div class="exp-img-label-sub">Replace with your own photo</div>
+          <div class="exp-img-label-title">My own portrait</div>
+          <div class="exp-img-label-sub">Vision Beyond the Lens.</div>
         </div>
       </div>
       <div class="exp-img-caption">
         <div class="exp-img-caption-dot"></div>
-        <div class="exp-img-caption-text">Featured Work · Multimedia</div>
+        <div class="exp-img-caption-text"></div>
       </div>
     </div>
   </div>
@@ -3156,7 +3214,7 @@
     </div>
 
   </div><!-- /photo grid -->
-  <a href="#" class="portfolio-more">View more samples</a>
+  <a href="https://drive.google.com/drive/folders/1uUk8oVAb1N_TeAayNAtQiXpoDljLST-J?usp=sharing" class="portfolio-more" target="_blank">View more samples</a>
 
   <!-- ══ VIDEOGRAPHY ══ -->
   <div class="portfolio-category-sep reveal" data-cat="video">
@@ -3186,7 +3244,7 @@
     </div>
 
     <div class="video-card" data-vid="2">
-      <video src="./samples/videos/SIAA.mp4" preload="metadata"></video>
+      <video src="./samples/videos/reel.mp4" preload="metadata"></video>
       <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
       <div class="vc-info">
         <div class="vc-top">
@@ -3197,14 +3255,14 @@
         </div>
         <div class="vc-bottom">
           <div class="vc-cat">Videography</div>
-          <div class="vc-title">SIAA Anniversary</div>
-          <div class="vc-desc">Commemorative event film for the SIAA anniversary celebration.</div>
+          <div class="vc-title">Reels</div>
+          <div class="vc-desc">Moments like these 🎞️✨</div>
         </div>
       </div>
     </div>
 
     <div class="video-card wide" data-vid="3">
-      <video src="./samples/videos/wedding.mp4" preload="metadata"></video>
+      <video src="./samples/videos/opening.mp4" preload="metadata"></video>
       <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
       <div class="vc-info">
         <div class="vc-top">
@@ -3215,14 +3273,14 @@
         </div>
         <div class="vc-bottom">
           <div class="vc-cat">Videography</div>
-          <div class="vc-title">Wedding Film</div>
-          <div class="vc-desc">Cinematic wedding film capturing intimate moments and the beauty of the day.</div>
+          <div class="vc-title">Coffee Shop Opening</div>
+          <div class="vc-desc">Cinematic coffee shop opening "Where Tasting Flashes".</div>
         </div>
       </div>
     </div>
 
   </div><!-- /video grid -->
-  <a href="#" class="portfolio-more">View more samples</a>
+  <a href="https://drive.google.com/drive/folders/1HzYF2yCILsCQ6vgjzxe7wR8H-waoVNw7?usp=sharing" class="portfolio-more" target="_blank">View more samples</a>
 
   <!-- ══ GRAPHICS ══ -->
   <div class="portfolio-category-sep reveal" data-cat="graphics">
@@ -3274,7 +3332,7 @@
     </div>
 
   </div><!-- /graphics grid -->
-  <a href="#" class="portfolio-more">View more samples</a>
+  <a href="https://drive.google.com/drive/folders/1B1PycP2kOEdj4u7MDx8u1Lz4EHS0Xnpb?usp=sharing" class="portfolio-more" target="_blank">View more samples</a>
 
   <!-- ══ ANIMATION ══ -->
   <div class="portfolio-category-sep reveal" data-cat="animation">
@@ -3286,7 +3344,7 @@
   <div class="portfolio-grid">
 
     <div class="portfolio-item cat-animation" data-cat="animation">
-      <video class="anim-video" src="./samples/animation/award.mp4" autoplay muted loop playsinline></video>
+      <video class="anim-video" src="./samples/animation/ad.mp4" autoplay muted loop playsinline></video>
       <div class="portfolio-thumb">
         <div class="ph-frame"></div>
         <div class="ph-icon">
@@ -3338,12 +3396,12 @@
       </div>
       <div class="portfolio-overlay">
         <div class="portfolio-cat">Animation</div>
-        <div class="portfolio-title">Kinetic Typography</div>
+        <div class="portfolio-title">Animated greeting · Holiday Motion</div>
       </div>
     </div>
 
   </div><!-- /animation grid -->
-  <a href="#" class="portfolio-more">View more samples</a>
+  <a href="https://drive.google.com/drive/folders/1B1PycP2kOEdj4u7MDx8u1Lz4EHS0Xnpb?usp=sharing" class="portfolio-more" target="_blank">View more samples</a>
 
   <!-- ══ AI VIDEOS ══ -->
   <div class="portfolio-category-sep reveal" data-cat="ai">
@@ -3355,7 +3413,7 @@
   <div class="video-grid">
 
     <div class="video-card wide" data-vid="ai1">
-      <video src="./samples/ai/ai.mp4" preload="metadata"></video>
+      <video src="./samples/ai/sub.mp4" preload="metadata"></video>
       <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
       <div class="vc-info">
         <div class="vc-top">
@@ -3391,7 +3449,7 @@
     </div>
 
   </div><!-- /ai video grid -->
-  <a href="#" class="portfolio-more">View more samples</a>
+  <a href="https://drive.google.com/drive/folders/1CaGPflgSRBa2osWJsKYyAieicVdCwDZx?usp=sharing" class="portfolio-more" target="_blank">View more samples</a>
 
 </section>
 
