@@ -2276,7 +2276,10 @@
 
 <!-- NAV -->
 <nav>
-  <div style="display:flex;align-items:baseline;gap:10px;position:relative;z-index:101;"></div>
+  <div style="display:flex;align-items:baseline;gap:10px;position:relative;z-index:101;">
+    <a href="#hero" class="nav-logo">JM</a>
+    <span style="font-size:0.7rem;letter-spacing:0.12em;color:var(--text-muted);text-transform:uppercase;">Creative Presentation</span>
+  </div>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
@@ -2617,6 +2620,7 @@
     <button class="filter-btn" data-filter="graphics">Graphics</button>
     <button class="filter-btn" data-filter="animation">Animation</button>
     <button class="filter-btn" data-filter="ai">AI Videos</button>
+    <button class="filter-btn" data-filter="reels">Reels</button>
   </div>
   <!-- ══ PHOTOGRAPHY ══ -->
   <div class="portfolio-category-sep reveal" data-cat="photo">
@@ -3353,9 +3357,8 @@
       </div>
     </div>
 
-    <div class="video-card" data-vid="2">
-      <video src="./samples/videos/reel.mp4" preload="metadata"></video>
-      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+    <a class="video-card" data-vid="2" href="https://drive.google.com/file/d/1qSyeRpcDlTN6QAM8-nOfvPqs0qmGrFmT/view?usp=sharing" target="_blank" style="text-decoration:none;">
+      <img src="./samples/videos/thumb2.png" alt="Reels" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6;transition:opacity 0.4s ease;z-index:0;">
       <div class="vc-info">
         <div class="vc-top">
           <span class="vc-index">02</span>
@@ -3365,11 +3368,11 @@
         </div>
         <div class="vc-bottom">
           <div class="vc-cat">Videography</div>
-          <div class="vc-title">Reels</div>
+          <div class="vc-title">Hightlights</div>
           <div class="vc-desc">Moments like these 🎞️✨</div>
         </div>
       </div>
-    </div>
+    </a>
 
     <a class="video-card wide" data-vid="3" href="https://drive.google.com/file/d/1grUF3vXd3WoylTSL11lj6dnt0K3qJEUH/view" target="_blank" style="text-decoration:none;">
       <img src="./samples/videos/thumb.PNG" alt="Coffee Shop Opening" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6;transition:opacity 0.4s ease;z-index:0;">
@@ -3391,6 +3394,9 @@
   </div><!-- /video grid -->
   <a href="https://canva.link/it41afvunru9d1n" class="portfolio-more" target="_blank">View more samples</a>
 
+  
+
+  
   <!-- ══ GRAPHICS ══ -->
   <div class="portfolio-category-sep reveal" data-cat="graphics">
     <span class="pcs-num">03</span>
@@ -3560,6 +3566,70 @@
   </div><!-- /ai video grid -->
   <a href="https://canva.link/it41afvunru9d1n" class="portfolio-more" target="_blank">View more samples</a>
 
+  <!-- ══ REELS ══ -->
+  <div class="portfolio-category-sep reveal" data-cat="reels">
+    <span class="pcs-num">06</span>
+    <span class="pcs-name">Reels</span>
+    <span class="pcs-line"></span>
+    <span class="pcs-count">3 works</span>
+  </div>
+  <div class="video-grid">
+
+    <a class="video-card wide" data-vid="reel1" href="https://drive.google.com/file/d/142u42EgYD2NtaIPqpSbgp1hAZaozWqYH/view?usp=sharing" target="_blank" style="text-decoration:none;">
+      <img src="./samples/reels/thumb2.png" alt="Reel 01" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6;transition:opacity 0.4s ease;z-index:0;">
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">01</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
+        </div>
+        <div class="vc-bottom">
+          <div class="vc-cat">Reels</div>
+          <div class="vc-title">Marketing reels</div>
+          <div class="vc-desc">Quick chat</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="video-card" data-vid="reel2" href="https://drive.google.com/file/d/1IXkz--s8nB7ZS_rmqX5rfGNqM3z35px1/view?usp=sharing" target="_blank" style="text-decoration:none;">
+      <img src="./samples/reels/thumb1.png" alt="Reel 02" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6;transition:opacity 0.4s ease;z-index:0;">
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">02</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
+        </div>
+        <div class="vc-bottom">
+          <div class="vc-cat">Reels</div>
+          <div class="vc-title">Marktech APAC</div>
+          <div class="vc-desc">informative reels</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="video-card" data-vid="reel3">
+      <video src="./samples/videos/reel1.mp4" preload="metadata"></video>
+      <div class="vc-no-src"><span class="vc-no-src-label">Add video src to enable playback</span></div>
+      <div class="vc-info">
+        <div class="vc-top">
+          <span class="vc-index">03</span>
+          <div class="vc-play">
+            <svg width="12" height="14" viewBox="0 0 12 14"><polygon points="0,0 12,7 0,14"/></svg>
+          </div>
+        </div>
+        <div class="vc-bottom">
+          <div class="vc-cat">Reels</div>
+          <div class="vc-title">JECHS</div>
+          <div class="vc-desc">Hightlight reels</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /reels video grid -->
+  <a href="https://canva.link/it41afvunru9d1n" class="portfolio-more" target="_blank">View more samples</a>
+
 </section>
 
 <!-- CONTACT -->
@@ -3579,8 +3649,8 @@
         </div>
 
         <div class="contact-info-item">
-          <div class="contact-link-label">Contact Number</div>
-          <div class="contact-info-value">09158865167</div>
+          <div class="contact-link-label">Location</div>
+          <div class="contact-info-value">Philippines</div>
         </div>
 
         <div class="contact-info-item">
@@ -3611,7 +3681,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Jherson Manejero</div>
-  <div class="footer-copy">© 2026 · Creative Presentation · Philippines</div>
+  <div class="footer-copy">© 2026 · Creative Presentation</div>
   <a href="https://www.behance.net/jhersonmanejero" target="_blank" class="footer-behance">Behance ↗</a>
 </footer>
 
@@ -3820,7 +3890,8 @@
     video:     'video',
     graphics:  'graphics',
     animation: 'animation',
-    ai:        'ai'
+    ai:        'ai',
+    reels:     'reels'
   };
 
   // Wrap each category's sep + grid + more-link in a [data-category] block for easy toggling
